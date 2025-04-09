@@ -62,6 +62,6 @@ public class Movimiento : MonoBehaviour
     public void SetHiding(bool hiding)
     {
         isHiding = hiding;
-        FindObjectOfType<Enemigo>()?.SetPlayerHiding(hiding);
+        FindAnyObjectByType<Enemigo>()?.SetPlayerHiding(hiding);
     }
 }

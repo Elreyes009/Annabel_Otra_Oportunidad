@@ -26,37 +26,29 @@ public class Interactuar : MonoBehaviour
 
             if (hit.collider != null)
             {
-                // 🏠 Si el objeto es una Puerta, intenta abrirla
-                Puerta puerta = hit.collider.GetComponent<Puerta>();
-                if (puerta != null)
+
+
+                if (hit.transform.CompareTag("Interactuable"))
                 {
-                    puerta.AbrirPuerta();
-                    return;
+                    NPC npc = hit.collider.GetComponent<NPC>();
+                    Puerta puerta = hit.collider.GetComponent<Puerta>();
+
+
+
+                    if (npc != null)
+                    {
+                        npc.ActivarDialogo();
+                        return;
+                    }
+                    if (puerta != null)
+                    {
+                        puerta.AbrirPuerta();
+                        return;
+                    }
                 }
 
-                // 🗣️ Si el objeto es un NPC, activa el diálogo
-                NPC npc = hit.collider.GetComponent<NPC>();
-                if (npc != null)
-                {
-                    npc.ActivarDialogo();
-                    return;
-                }
-
-                // 📖 Si el objeto es un Libro, activa su evento
-                EventoFinal libro = hit.collider.GetComponent<EventoFinal>();
-                if (libro != null)
-                {
-                    libro.ActivarEvento();
-                    return;
-                }
             }
         }
     }
 
-    void OnDrawGizmos()
-    {
-        // 🛠 Dibuja el Raycast en la dirección del movimiento
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, transform.position + (Vector3)direccionMovimiento * distanciaRay);
-    }
 }

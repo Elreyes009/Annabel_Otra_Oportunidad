@@ -18,9 +18,11 @@ public class Enemigo : MonoBehaviour
 
     private Vector3 posicionInicial;
 
+    public bool inLight;
+
     void Start()
     {
-        player = FindObjectOfType<Movimiento>().transform;
+        player = FindAnyObjectByType<Movimiento>().transform;
         if (player != null)
         {
             playerMovement = player.GetComponent<Movimiento>();
@@ -34,9 +36,16 @@ public class Enemigo : MonoBehaviour
         posicionInicial = transform.position;
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        if (playerMovement != null && playerMovement.IsPlayerMoving() && !isMoving && !playerIsHiding)
+        if (inLight)
+        {
+            if (playerMovement != null && playerMovement.IsPlayerMoving() && !isMoving && !playerIsHiding)
+            {
+                MoverEnemigo();
+            }
+        }
+        else
         {
             MoverEnemigo();
         }

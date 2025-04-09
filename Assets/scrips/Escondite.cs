@@ -12,13 +12,13 @@ public class Escondite : MonoBehaviour
 
     void Start()
     {
-        player = FindObjectOfType<Movimiento>();
+        player = FindAnyObjectByType<Movimiento>();
         if (player != null)
         {
             playerSprite = player.GetComponent<SpriteRenderer>();
         }
 
-        gestorDeEnemigos = FindObjectOfType<GestorDeEnemigos>(); // Encuentra el gestor de enemigos
+        gestorDeEnemigos = FindAnyObjectByType<GestorDeEnemigos>(); // Encuentra el gestor de enemigos
     }
 
     void Update()
@@ -27,16 +27,16 @@ public class Escondite : MonoBehaviour
         {
             if (isHiding)
             {
-                SalirDelJarron();
+                SalirDelEscondite();
             }
             else
             {
-                EntrarAlJarron();
+                Esconderse();
             }
         }
     }
 
-    void EntrarAlJarron()
+    void Esconderse()
     {
         isHiding = true;
         playerSprite.enabled = false; // Oculta al jugador
@@ -50,7 +50,7 @@ public class Escondite : MonoBehaviour
         }
     }
 
-    void SalirDelJarron()
+    void SalirDelEscondite()
     {
         isHiding = false;
         playerSprite.enabled = true; // Muestra al jugador

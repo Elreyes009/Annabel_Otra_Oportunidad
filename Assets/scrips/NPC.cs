@@ -24,6 +24,7 @@ public class NPC : MonoBehaviour
     // Método para activar el diálogo
     public void ActivarDialogo()
     {
+        Time.timeScale = 0f;
         if (dialogoActivo)
         {
             SiguienteTexto();
@@ -61,6 +62,7 @@ public class NPC : MonoBehaviour
     // Ocultar el cuadro de diálogo
     void OcultarTexto()
     {
+        Time.timeScale = 1f;
         dialogoTexto.gameObject.SetActive(false);
         dialogoFondo.SetActive(false);
         dialogoActivo = false;

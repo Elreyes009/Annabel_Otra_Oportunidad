@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class Respawn : MonoBehaviour
@@ -9,6 +10,7 @@ public class Respawn : MonoBehaviour
     private Animator playerAnimator;
     private SpriteRenderer playerSprite;
     private Vector3 puntoDeRespawn;
+    private Quaternion rotationRespawn;
 
     void Start()
     {
@@ -16,6 +18,8 @@ public class Respawn : MonoBehaviour
         playerAnimator = GetComponent<Animator>();
         playerSprite = GetComponent<SpriteRenderer>();
         puntoDeRespawn = transform.position; // Guarda la posición inicial
+        rotationRespawn = transform.rotation;
+        
     }
 
     public void Reaparecer()
@@ -28,6 +32,7 @@ public class Respawn : MonoBehaviour
         playerSprite.enabled = false; // Ocultar al jugador
         yield return new WaitForSeconds(1f); // Esperar antes de reaparecer
         transform.position = puntoDeRespawn; // Mover al último checkpoint
+        transform.rotation = rotationRespawn;
         playerSprite.enabled = true; // Mostrar al jugador
         playerMovement.enabled = true; // Reactivar el control
     }
