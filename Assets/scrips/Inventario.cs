@@ -8,7 +8,7 @@ public class Inventario : MonoBehaviour
     public static Inventario instance;
 
     private Dictionary<string, int> items = new Dictionary<string, int>();
-    public TextMeshProUGUI contadorUI; // UI del inventario
+    public TextMeshProUGUI contadorUI;
 
     private void Awake()
     {

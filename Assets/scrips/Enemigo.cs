@@ -13,7 +13,7 @@ public class Enemigo : MonoBehaviour
     private bool playerIsHiding = false;
     private bool isMoving = false;
     private Transform player;
-    private Movimiento playerMovement;
+    private Mov playerMovement;
     private Animator playerAnimator;
 
     private Vector3 posicionInicial;
@@ -22,10 +22,10 @@ public class Enemigo : MonoBehaviour
 
     void Start()
     {
-        player = FindAnyObjectByType<Movimiento>().transform;
+        player = FindAnyObjectByType<Mov>().transform;
         if (player != null)
         {
-            playerMovement = player.GetComponent<Movimiento>();
+            playerMovement = player.GetComponent<Mov>();
             playerAnimator = player.GetComponent<Animator>();
         }
         else
@@ -142,7 +142,7 @@ public class Enemigo : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
 
-        Respawn respawnScript = player.GetComponent<Respawn>();
+        Mov respawnScript = player.GetComponent<Mov>();
         if (respawnScript != null)
         {
             respawnScript.Reaparecer();

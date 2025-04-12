@@ -7,12 +7,12 @@ public class Escondite : MonoBehaviour
     private bool playerInRange = false;
     private bool isHiding = false;
     private SpriteRenderer playerSprite;
-    private Movimiento player;
+    private Mov player;
     private GestorDeEnemigos gestorDeEnemigos; // Nueva referencia al GestorDeEnemigos
 
     void Start()
     {
-        player = FindAnyObjectByType<Movimiento>();
+        player = FindAnyObjectByType<Mov>();
         if (player != null)
         {
             playerSprite = player.GetComponent<SpriteRenderer>();

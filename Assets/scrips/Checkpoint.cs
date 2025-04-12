@@ -8,7 +8,7 @@ public class Checkpoint : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            collision.GetComponent<Respawn>().ActualizarPuntoDeRespawn(transform.position);
+            collision.GetComponent<Mov>().ActualizarPuntoDeRespawn(transform.position);
         }
     }
 }
