@@ -1,25 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Tilemaps;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 public class Enemigo : MonoBehaviour
 {
+    public GestorDeEnemigos enemManager;
     public float moveSpeed = 3f;
     public Vector2 gridSize = new Vector2(1f, 1f);
     public LayerMask obstacleLayer;
 
+
     private bool playerIsHiding = false;
-    private bool isMoving = false;
+    public bool isMoving = false;
     private Transform player;
+    public Transform patrolEmty;
     private Mov playerMovement;
     private Animator playerAnimator;
 
-    private Vector3 posicionInicial;
+    public Vector3 posicionInicial;
 
     public bool inLight;
-
+    public bool inVision;
     void Start()
     {
         player = FindAnyObjectByType<Mov>().transform;
@@ -38,26 +42,36 @@ public class Enemigo : MonoBehaviour
 
     void FixedUpdate()
     {
+        Vector2 moveTo;
+        if (inVision)
+        {
+            moveTo = player.position;
+        }
+        else
+        {
+            moveTo = patrolEmty.position;
+        }
+
         if (inLight)
         {
             if (playerMovement != null && playerMovement.IsPlayerMoving() && !isMoving && !playerIsHiding)
             {
-                MoverEnemigo();
+                MoverEnemigo(moveTo);
             }
         }
         else
         {
-            MoverEnemigo();
+            MoverEnemigo(moveTo);
         }
+
     }
 
-    public void MoverEnemigo()
+    public void MoverEnemigo(Vector2 playerPosition)
     {
         if (isMoving || player == null) return;
 
-        Vector3 playerPosition = player.position;
-        Vector3 enemyPosition = transform.position;
-        Vector3 direction = (playerPosition - enemyPosition).normalized;
+        Vector2 enemyPosition = transform.position;
+        Vector2 direction = (playerPosition - enemyPosition).normalized;
 
         Vector2 moveDirection = Vector2.zero;
 
@@ -70,7 +84,7 @@ public class Enemigo : MonoBehaviour
             moveDirection = new Vector2(0, Mathf.Sign(direction.y));
         }
 
-        Vector3 targetPosition = enemyPosition + new Vector3(moveDirection.x * gridSize.x, moveDirection.y * gridSize.y, 0);
+        Vector2 targetPosition = enemyPosition + new Vector2(moveDirection.x * gridSize.x, moveDirection.y * gridSize.y);
 
         if (!IsObstacle(targetPosition))
         {
@@ -96,31 +110,39 @@ public class Enemigo : MonoBehaviour
         return obstacle != null;
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            SetPlayerHiding(false);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            SetPlayerHiding(true);
+        }
+    }
+
+
+
     public void SetPlayerHiding(bool isHiding)
     {
         playerIsHiding = isHiding;
         if (playerIsHiding)
         {
-            VolverAposicionInicial();
+            inVision = false;
+            
         }
-    }
-
-    private void VolverAposicionInicial()
-    {
-        StopAllCoroutines(); // Detiene cualquier movimiento en curso
-        isMoving = false; // Evita que el enemigo siga moviéndose
-        transform.position = posicionInicial; // Vuelve a la posición de origen
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Player"))
+        else
         {
-            StartCoroutine(MatarJugador());
+            inVision = true;
         }
     }
 
-    IEnumerator MatarJugador()
+    public IEnumerator MatarJugador()
     {
         if (playerMovement != null)
         {
@@ -157,6 +179,6 @@ public class Enemigo : MonoBehaviour
             playerMovement.enabled = true;
         }
 
-        VolverAposicionInicial();
+        enemManager.VolverAposicionInicial();
     }
 }
